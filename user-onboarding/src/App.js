@@ -1,12 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Forms from './components/Forms'
+// import Forms from './components/Forms'
+import yup from 'yup'
 
 function App() {
+  let schema = yup.string()
+  await schema.isValid('TEST')
   return (
     <div className="App">
-      
+      <h1>Placeholder</h1>
     </div>
   );
 }
