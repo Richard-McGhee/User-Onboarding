@@ -17,18 +17,19 @@ export default function Forms(props) {
   const formSchema = yup.object().shape({
       uname: yup
       .string()
+      .min(4, 'Name must but at least 4 characters.')
       .required('Must input a name.'),
       uemail: yup
       .string()
       .required('Must input an email'),
       upassword: yup
       .string()
+      .min(4, 'Password must be at least 4 characters.')
       .required('Must input a password'),
       uTOS: yup
       .boolean()
       .oneOf([true], 'Must accept TOS')
-
-  })
+    })
 
   const onInputChange = evt => {
       setNewUser({
@@ -55,7 +56,7 @@ export default function Forms(props) {
       </label>
       <label>User Email 
         <input id='uemailID'
-        type='text'
+        type='email'
         name='uemail'
         placeholder='User Email'
         onChange={onInputChange}
@@ -63,7 +64,7 @@ export default function Forms(props) {
       </label>
       <label>User Password 
         <input id='upasswordID'
-        type='text'
+        type='password'
         name='upassword'
         placeholder='User Password'
         onChange={onInputChange}

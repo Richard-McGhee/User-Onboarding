@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Forms from './components/Forms'
-import * as yup from 'yup'
+// import * as yup from 'yup'
 
 function App() {
   const [ users, setUsers ] = useState([])
