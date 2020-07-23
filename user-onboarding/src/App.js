@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-// import Forms from './components/Forms'
-import yup from 'yup'
+import Forms from './components/Forms'
+import * as yup from 'yup'
 
 function App() {
-  let schema = yup.string()
-  await schema.isValid('TEST')
+  const [ users, setUsers ] = useState([])
   return (
-    <div className="App">
-      <h1>Placeholder</h1>
+    <div className='app-container'>
+      <h1>PLACEHOLDER</h1>
+      <Forms users={users} setUsers={setUsers} />
     </div>
   );
 }
