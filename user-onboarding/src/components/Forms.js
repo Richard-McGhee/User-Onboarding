@@ -29,7 +29,7 @@ export default function Forms(props) {
       uTOS: yup
       .boolean()
       .oneOf([true], 'Must accept TOS')
-    })
+})
 
   const onInputChange = evt => {
       setNewUser({
