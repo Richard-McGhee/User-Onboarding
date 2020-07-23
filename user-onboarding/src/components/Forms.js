@@ -9,6 +9,26 @@ export default function Forms(props) {
       upassword: '',
       uTOS: false
   })
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    terms: ""
+  });
+  const formSchema = yup.object().shape({
+      uname: yup
+      .string()
+      .required('Must input a name.'),
+      uemail: yup
+      .string()
+      .required('Must input an email'),
+      upassword: yup
+      .string()
+      .required('Must input a password'),
+      uTOS: yup
+      .boolean()
+      .oneOf([true], 'Must accept TOS')
+
+  })
 
   const onInputChange = evt => {
       setNewUser({
