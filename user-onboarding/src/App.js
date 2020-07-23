@@ -9,6 +9,9 @@ function App() {
     <div className='app-container'>
       <h1>PLACEHOLDER</h1>
       <Forms users={users} setUsers={setUsers} />
+      {users.map(item => (
+        <h3 key={item.id}>{item.uname} - {item.uemail}</h3>
+    ))}
     </div>
   );
 }
