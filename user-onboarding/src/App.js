@@ -10,7 +10,7 @@ function App() {
       <h1>PLACEHOLDER</h1>
       <Forms users={users} setUsers={setUsers} />
       {users.map(item => (
-        <h3 key={item.id}>{item.uname} - {item.uemail}</h3>
+        <h3 key={item.id}>{item.name} - {item.email}</h3>
     ))}
     </div>
   );

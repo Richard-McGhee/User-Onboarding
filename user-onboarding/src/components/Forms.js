@@ -1,92 +1,95 @@
 import React, { useState } from 'react';
-import * as yup from 'yup'
+import { registerSchema } from './Schemas'
+import axios from 'axios'
 
 export default function Forms(props) {
-  const { users, setUsers } = props
   const [ newUser, setNewUser ] = useState({
-      uname: '',
-      uemail: '',
-      upassword: '',
-      uTOS: false
+      name: '',
+      email: '',
+      password: '',
+      TOS: false
   })
   const [errors, setErrors] = useState({
     email: "",
     password: "",
     terms: ""
   });
-  const formSchema = yup.object().shape({
-      uname: yup
-      .string()
-      .min(4, 'Name must but at least 4 characters.')
-      .required('Must input a name.'),
-      uemail: yup
-      .string()
-      .required('Must input an email'),
-      upassword: yup
-      .string()
-      .min(4, 'Password must be at least 4 characters.')
-      .required('Must input a password'),
-      uTOS: yup
-      .boolean()
-      .oneOf([true], 'Must accept TOS')
-})
 
   const onInputChange = evt => {
+    if(e.target.name !== "TOS"){
       setNewUser({
           ...newUser,
           [evt.target.name]: evt.target.value
-      })
+      })}
+      else{
+        setNewUser({
+          ...newUser,
+          TOS: evt.target.checked
+      });
+      }
   }
+
   const onSubmitForm = evt => {
       evt.preventDefault()
-      setUsers([...users, newUser])
-      console.log(newUser)
-      console.log(users)
+      registerSchema.validate(newUser, { abortEarly: false})
+      .then( _ => {
+        axios.post('https://reqres.in/api/users', newUser)
+            .then(res => {
+              if(errors.length > 0){
+                setErrors([]);
+              }
+            props.setUsers([...props.users, res.data])
+            setNewUser();
+            })
+            .catch(err => {
+            console.dir(err);
+            });
+      })
+      .catch(err => {
+        console.dir(err);
+        setErrors([...err.inner]);
+      })
   }
 
   return (
-    <form onSubmit={onSubmitForm}>
+    <form>
       <label>User Name 
-        <input id='unameID'
+        <input id='nameID'
         type='text'
-        name='uname'
+        name='username'
         placeholder='User Name'
         onChange={onInputChange}
         />
       </label>
       <label>User Email 
-        <input id='uemailID'
+        <input id='emailID'
         type='email'
-        name='uemail'
+        name='email'
         placeholder='User Email'
         onChange={onInputChange}
         />
       </label>
       <label>User Password 
-        <input id='upasswordID'
+        <input id='passwordID'
         type='password'
-        name='upassword'
+        name='password'
         placeholder='User Password'
         onChange={onInputChange}
         />
       </label><br/>
       <label>Read and Understand our TOS 
-        <input id='uTOSID'
+        <input id='TOSID'
         type='checkbox'
-        name='uTOS'
-        onChange={evt =>{
-            setNewUser({
-                ...newUser,
-                [evt.target.name]: evt.target.checked
-            })
-        }}
+        name='TOS'
+        onChange={onInputChange}
         />
       </label><br/>
-      <input id='uSubmitID'
-      type='submit'
-      name='uSubmit'
-      value='Submit Your Information'
-      />
+      <button onClick={onSubmitForm}>Submit Your Information</button>
+      <div>
+                {errors.map( err => (  
+                    <p style={{color: "red"}}>{err.message}</p>
+                ))}
+            </div>
     </form>
   );
 }
