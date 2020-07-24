@@ -3,20 +3,17 @@ import { registerSchema } from './Schemas'
 import axios from 'axios'
 
 export default function Forms(props) {
-  const [ newUser, setNewUser ] = useState({
-      name: '',
-      email: '',
-      password: '',
-      TOS: false
-  })
-  const [errors, setErrors] = useState({
+  const initialValues = {
+    username: "",
     email: "",
     password: "",
-    terms: ""
-  });
+    TOS: false
+  }
+  const [ newUser, setNewUser ] = useState(initialValues)
+  const [errors, setErrors] = useState([]);
 
   const onInputChange = evt => {
-    if(e.target.name !== "TOS"){
+    if(evt.target.name !== "TOS"){
       setNewUser({
           ...newUser,
           [evt.target.name]: evt.target.value
@@ -39,16 +36,18 @@ export default function Forms(props) {
                 setErrors([]);
               }
             props.setUsers([...props.users, res.data])
-            setNewUser();
+            setNewUser(initialValues)
             })
             .catch(err => {
-            console.dir(err);
+            console.dir(err)
             });
       })
       .catch(err => {
-        console.dir(err);
-        setErrors([...err.inner]);
+        console.dir(err)
+        setErrors([...err.inner])
       })
+      console.log(newUser)
+      console.log(props.users)
   }
 
   return (
@@ -58,6 +57,7 @@ export default function Forms(props) {
         type='text'
         name='username'
         placeholder='User Name'
+        value={newUser.username}
         onChange={onInputChange}
         />
       </label>
@@ -66,6 +66,7 @@ export default function Forms(props) {
         type='email'
         name='email'
         placeholder='User Email'
+        value={newUser.email}
         onChange={onInputChange}
         />
       </label>
@@ -74,6 +75,7 @@ export default function Forms(props) {
         type='password'
         name='password'
         placeholder='User Password'
+        value={newUser.password}
         onChange={onInputChange}
         />
       </label><br/>
@@ -81,15 +83,16 @@ export default function Forms(props) {
         <input id='TOSID'
         type='checkbox'
         name='TOS'
+        checked={newUser.TOS}
         onChange={onInputChange}
         />
       </label><br/>
       <button onClick={onSubmitForm}>Submit Your Information</button>
       <div>
-                {errors.map( err => (  
-                    <p style={{color: "red"}}>{err.message}</p>
-                ))}
-            </div>
+        {errors.map( err => (  
+          <p style={{color: "red"}}>{err.message}</p>
+          ))}
+      </div>
     </form>
   );
 }
